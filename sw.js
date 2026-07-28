@@ -1,4 +1,4 @@
-const CACHE = 'xiaoy-v6';
+const CACHE = 'xiaoy-v7';
 const ASSETS = ['./', './index.html', './app.js', './manifest.json', './bg.jpg', './apple-touch-icon.png', './icon-192.png', './icon-512.png', './news.json'];
 
 self.addEventListener('install', e => {
