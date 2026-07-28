@@ -135,6 +135,48 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:l
 .dl-img:hover{transform:scale(1.05);box-shadow:var(--s2)}
 .dl-f{display:flex;justify-content:flex-end;margin-top:8px}
 
+/* 心情空间模块 · 可爱风 */
+.mood-head{text-align:center;padding:20px 14px;background:linear-gradient(135deg,#ffe9f0,#fff5f7);border-radius:var(--r3);margin-bottom:14px;box-shadow:var(--s1);position:relative;overflow:hidden}
+.mood-head::before{content:'🌈';position:absolute;top:8px;left:14px;font-size:18px;opacity:.6}
+.mood-head::after{content:'💫';position:absolute;top:10px;right:16px;font-size:16px;opacity:.6}
+.mh-emoji{font-size:36px;line-height:1}
+.mh-t{font-size:19px;font-weight:800;color:var(--p60);margin-top:4px}
+.mh-s{font-size:12px;color:var(--p50);margin-top:4px}
+.mood-sec{display:flex;align-items:center;gap:8px;margin:18px 2px 10px;font-size:15px;font-weight:700;color:var(--p60)}
+.mood-sec .ms-ic{font-size:18px}
+.mood-sec .ms-sub{font-size:11px;font-weight:400;color:var(--t3);margin-left:auto;text-align:right}
+.dh-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.dh-moods{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.mood-b{width:38px;height:38px;border-radius:50%;border:2px solid var(--bd);background:var(--cream);font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--t);padding:0}
+.mood-b:hover{border-color:var(--p40);transform:scale(1.08)}
+.mood-b.on{border-color:var(--p50);background:var(--p20);box-shadow:0 3px 10px rgba(217,122,150,.25)}
+.topic-card{background:var(--cream);border-radius:var(--r2);padding:14px;margin-bottom:12px;border:1px solid var(--bd);transition:var(--t);position:relative}
+.topic-card:hover{border-color:var(--bd2);box-shadow:var(--s1)}
+.topic-num{position:absolute;top:12px;right:14px;width:26px;height:26px;border-radius:50%;background:var(--p10);color:var(--p50);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.topic-q{font-size:14px;color:var(--t1);line-height:1.7;font-weight:500;padding-right:30px}
+.topic-ctrl{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.rec-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:8px 14px;border-radius:20px;border:none;cursor:pointer;transition:var(--t);min-height:38px}
+.rec-btn.rec{background:var(--p50);color:#fff}
+.rec-btn.rec.active{background:#e05a7a;animation:pulse 1.2s infinite}
+.rec-btn.play{background:var(--gac);color:#fff}
+.rec-btn.del{background:var(--cream);color:var(--t2);border:1px solid var(--bd)}
+.rec-btn:disabled{opacity:.6;cursor:default}
+.rec-timer{font-size:12px;color:#fff;font-weight:600}
+.rec-dur{font-size:12px;color:var(--t3)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(224,90,122,.5)}70%{box-shadow:0 0 0 10px rgba(224,90,122,0)}100%{box-shadow:0 0 0 0 rgba(224,90,122,0)}}
+.essay-card{background:linear-gradient(135deg,#fffafb,#fff);border-radius:var(--r3);padding:18px;margin-bottom:12px;border:1px solid var(--bd);box-shadow:var(--s1)}
+.essay-t{font-size:18px;font-weight:800;color:var(--p60);text-align:center}
+.essay-a{font-size:12px;color:var(--t3);text-align:center;margin-top:4px;margin-bottom:14px}
+.essay-p{font-size:14px;color:var(--t1);line-height:1.9;margin-bottom:10px;padding:10px 12px;border-radius:var(--r1);transition:var(--t);border:1px solid transparent}
+.essay-p.on{background:#fff5f7;border-color:var(--p40);box-shadow:0 0 0 3px rgba(217,122,150,.12)}
+.essay-ctrl{display:flex;gap:8px;justify-content:center;margin-top:14px}
+.dl{background:var(--cream);border-radius:var(--r2);padding:14px;margin-bottom:12px;border:1px solid var(--bd);transition:var(--t);position:relative}
+.dl:hover{border-color:var(--bd2);box-shadow:var(--s1)}
+.dl-h{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.dl-d{font-size:13px;font-weight:600;color:var(--p50)}
+.dl-m{font-size:18px}
+.dl-t{font-size:14px;color:var(--t1);line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.dl-f{display:flex;justify-content:flex-end;margin-top:8px}
 .en-intro{background:linear-gradient(135deg,#f8fafc,#fff5f7);border:1px solid var(--bd)}
 .en-intro-head{display:flex;gap:12px;align-items:flex-start}
 .en-globe{width:42px;height:42px;border-radius:12px;background:var(--gpk);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
@@ -450,7 +492,7 @@ const NAV=[
   {id:'expression',ic:'💬',lb:'语言表达'},
   {id:'photo',ic:'📷',lb:'摄影审美'},
   {id:'savings',ic:'💰',lb:'存钱目标'},
-  {id:'diary',ic:'📔',lb:'日记'}
+  {id:'mood',ic:'💗',lb:'心情空间'}
 ];
 function renderNav(){
   const nav=document.getElementById('sbNav');
@@ -1151,6 +1193,198 @@ V.diary=function(){
         <div class="dl-f"><button class="btn btn-d btn-sm" onclick="delDiary('${e.id}')">删除</button></div>
       </div>`).join('')}
     </div>`:'<div class="empty"><div class="ei">📔</div><div class="et">还没有日记，写下第一篇吧</div></div>'}
+  `;
+};
+
+// ─── 心情空间 ────────────────────────────────────────
+const MOOD_MOODS=['😊','🥰','😌','🤔','😢','😴','😤','🌟'];
+const MOOD_TOPICS=[
+  '用三个词语形容你今天的心情，并说说为什么。',
+  '今天最让你感恩的一件小事是什么？',
+  '如果明天有一整天的自由时间，你最想做什么？',
+  '最近学到的一个新知识或新词，分享给大家。',
+  '描述一下你此刻窗外的景色。',
+  '你最喜欢的一个季节是哪个？理由是什么？',
+  '今天遇到的一个小挑战，你是怎么面对的？',
+  '给三年后的自己说一段话。',
+  '你最近在追的一部剧或一本书，讲讲它。',
+  '说说你心目中的理想周末。',
+  '你最想对家人说的一句心里话是什么？',
+  '描述你最喜欢的一道菜的味道。',
+  '今天哪个人让你印象最深？为什么？',
+  '如果你可以瞬间学会一项技能，会是什么？',
+  '分享一个让你开怀大笑的瞬间。',
+  '你最近在坚持的一个好习惯是什么？',
+  '聊聊你手机相册里最新的一张照片。',
+  '你心目中的好朋友是什么样的？',
+  '今天你为自己做的一件好事是什么？',
+  '描述你最放松的一个时刻。',
+  '你最近听到的一句打动你的话。',
+  '如果可以去世界上任何地方，你会选哪里？',
+  '说说你小时候最难忘的一个游戏。',
+  '你今天想放下的一件烦心事是什么？'
+];
+const MOOD_ESSAYS=[
+  {title:'把日子过成诗',author:'佚名',ps:['我们总在赶路，却忘了为什么出发。其实生活不在远方的终点，而在脚下每一步的呼吸里。','试着在每个清晨留十分钟给自己：看光怎样爬上窗台，听风怎样穿过树叶。这些细小的温柔，才是日子真正的质地。','慢下来，不是停滞，而是让心有余地，去接住那些平时被忽略的美好。']},
+  {title:'独处是一种能力',author:'佚名',ps:['热闹容易，安静难。能在独处中不慌张，才说明你真正与自己相处得来。','一个人时，可以读书、发呆、整理房间，也可以什么都不做。重要的是，你不再害怕安静，而是从中听见自己的声音。','学会独处，是送给成年自己最好的礼物。']},
+  {title:'谢谢平凡的日子',author:'佚名',ps:['我们习惯了把感谢留给大事，却忘了平凡的一天本身，就是一种幸运。','能安稳地醒来，能喝到一杯热茶，能听见雨声，能与爱的人说一句话——这些都不该被视作理所当然。','心怀感恩的人，总能在灰暗里，也看见一点光。']},
+  {title:'你正在变好',author:'佚名',ps:['成长不是某一刻的顿悟，而是无数个普通日子的累加。你读过的书、走过的路、咽下的委屈，都成了今天的你。','不必急于证明什么。允许自己慢慢来，允许偶尔的迷茫。只要还在向前，哪怕很慢，也是一种胜利。','请相信，你远比自己以为的，更坚韧。']},
+  {title:'此刻即全部',author:'佚名',ps:['过去已不可追，未来尚未到来，我们唯一真正拥有的，是此刻。','放下对昨天的懊悔，也放下对明天的焦虑，把注意力轻轻放在眼前这件小事上。认真吃饭，认真走路，认真呼吸。','当你全然地在，幸福就悄悄发生了。']},
+  {title:'温柔自有力量',author:'佚名',ps:['温柔不是软弱，而是一种经过选择的和善。它需要对世界保持敏感，也需要对自己保持耐心。','对陌生人微笑，对犯错的人宽容，对疲惫的自己说一句「辛苦了」。这些微小的善意，会一点点软化生活的棱角。','愿你柔软，也有力量。']},
+  {title:'明天会亮起来',author:'佚名',ps:['再长的夜，也会迎来天亮。这不是安慰，而是规律。','当你觉得撑不下去的时候，请记得：你已经在很多个「撑不下去」的日子里，撑过来了。这一次也一样。','把希望种进今天，明天自会开花。']},
+  {title:'找到你的热爱',author:'佚名',ps:['人这一生，总要有一件让自己眼睛发亮的事。它未必能赚钱，却能让平淡的日子有了盼头。','也许是画画，也许是做饭，也许只是傍晚散步时拍一张云。当你沉浸其中，时间会温柔地放慢脚步。','守住热爱，就是守住生活里的那盏灯。']}
+];
+
+// 录音存 IndexedDB（避免 localStorage 容量爆掉）
+const AUD=(()=>{
+  const DBNAME='xy_audio',STORE='recs',VER=1;let dbp=null;
+  function open(){if(dbp)return dbp;dbp=new Promise((res,rej)=>{const r=indexedDB.open(DBNAME,VER);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains(STORE))r.result.createObjectStore(STORE)};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});return dbp}
+  function store(mode){return open().then(db=>db.transaction(STORE,mode).objectStore(STORE))}
+  return {
+    put(k,b){return store('readwrite').then(s=>new Promise((res,rej)=>{const rq=s.put(b,k);rq.onsuccess=()=>res();rq.onerror=()=>rej(rq.error)}))},
+    get(k){return store('readonly').then(s=>new Promise((res,rej)=>{const rq=s.get(k);rq.onsuccess=()=>res(rq.result);rq.onerror=()=>rej(rq.error)}))},
+    del(k){return store('readwrite').then(s=>new Promise((res,rej)=>{const rq=s.delete(k);rq.onsuccess=()=>res();rq.onerror=()=>rej(rq.error)}))}
+  };
+})();
+
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function daySeed(d){const dt=new Date(d+'T00:00:00');const base=new Date(dt.getFullYear()+'-01-01T00:00:00');return Math.floor((dt-base)/86400000)+1}
+function seededShuffle(arr,seed){const r=mulberry32(seed);const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function moodTopicsToday(d){const seed=daySeed(d||fmtD(Date.now()));return seededShuffle(MOOD_TOPICS,seed).slice(0,3)}
+function moodEssayToday(d){const seed=daySeed(d||fmtD(Date.now()));return MOOD_ESSAYS[seed%MOOD_ESSAYS.length]}
+
+// 心情打卡
+let moodSelDate=fmtD(Date.now());
+let moodDraftMood='😊';
+let moodDraftNote='';
+function moodSyncNote(){const ta=document.getElementById('moodNote');if(ta)moodDraftNote=ta.value}
+function moodOnDate(d){moodSyncNote();moodSelDate=d;const es=DB.g('moodEntries')||[];const e=es.find(x=>x.date===d);if(e){moodDraftNote=e.note||'';moodDraftMood=e.mood||'😊'}else{moodDraftNote='';moodDraftMood='😊'}renderView()}
+function moodSetMood(m){moodSyncNote();moodDraftMood=m;renderView()}
+function saveMood(){moodSyncNote();const note=moodDraftNote.trim();if(!note)return toast('写点心情吧 💗','error');const es=DB.g('moodEntries')||[];const idx=es.findIndex(x=>x.date===moodSelDate);const e={id:uid(),date:moodSelDate,mood:moodDraftMood,note};if(idx>=0){e.id=es[idx].id;es[idx]=e}else es.push(e);es.sort((a,b)=>b.date.localeCompare(a.date));DB.s('moodEntries',es);moodDraftNote='';renderView();toast('心情已记下 ✨','success')}
+function delMood(id){const es=DB.g('moodEntries')||[];DB.s('moodEntries',es.filter(x=>x.id!==id));renderView();toast('已删除','success')}
+
+// 录音（朗读话题）
+let recState={idx:null,active:false,secs:0,mr:null,chunks:[],stream:null,timer:null,requesting:false};
+function fmtRec(s){const m=Math.floor(s/60),ss=s%60;return(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss}
+function startRec(idx){
+  if(recState.active||recState.requesting)return;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder)return toast('当前环境不支持录音 🎤','error');
+  speechSynthesis.cancel();
+  recState={idx,active:false,secs:0,mr:null,chunks:[],stream:null,timer:null,requesting:true};
+  renderView();
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    recState.stream=stream;
+    let mt='';
+    const cands=['audio/webm;codecs=opus','audio/webm','audio/mp4'];
+    for(const c of cands){if(window.MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(c)){mt=c;break}}
+    const mr=new MediaRecorder(stream,mt?{mimeType:mt}:undefined);
+    recState.mr=mr;recState.chunks=[];
+    mr.ondataavailable=e=>{if(e.data&&e.data.size)recState.chunks.push(e.data)};
+    mr.onstop=()=>{const s=recState.stream;if(s)s.getTracks().forEach(t=>t.stop());saveRec(idx);};
+    mr.start();
+    recState.active=true;recState.requesting=false;recState.secs=0;
+    recState.timer=setInterval(()=>{recState.secs++;const el=document.getElementById('recTimer');if(el)el.textContent=fmtRec(recState.secs)},1000);
+    renderView();
+  }).catch(()=>{recState={idx:null,active:false,secs:0,mr:null,chunks:[],stream:null,timer:null,requesting:false};toast('无法访问麦克风，请允许录音权限 🎤','error');renderView()});
+}
+function stopRec(){if(recState.mr&&recState.mr.state!=='inactive')recState.mr.stop();if(recState.timer)clearInterval(recState.timer)}
+function saveRec(idx){
+  if(!recState.chunks.length){recState={idx:null,active:false,secs:0,mr:null,chunks:[],stream:null,timer:null,requesting:false};return renderView()}
+  const blob=new Blob(recState.chunks,{type:recState.chunks[0]?recState.chunks[0].type:'audio/webm'});
+  const dur=recState.secs;const date=moodSelDate;const key=date+'_'+idx;
+  recState={idx:null,active:false,secs:0,mr:null,chunks:[],stream:null,timer:null,requesting:false};
+  AUD.put('mood_'+key,blob).then(()=>{
+    const meta=DB.g('moodRecMeta')||{};
+    meta[key]={date,idx,dur};
+    DB.s('moodRecMeta',meta);
+    renderView();toast('朗读录音已保存 🎉','success');
+  }).catch(()=>toast('录音保存失败，请稍后重试','error'));
+}
+function playRec(key){
+  const meta=(DB.g('moodRecMeta')||{})[key];if(!meta)return;
+  AUD.get('mood_'+key).then(blob=>{
+    if(!blob)return toast('录音丢失，请重新录制','error');
+    const url=URL.createObjectURL(blob);const a=new Audio(url);
+    a.onended=()=>URL.revokeObjectURL(url);
+    a.play().catch(()=>toast('播放失败','error'));
+  });
+}
+function delRec(key){AUD.del('mood_'+key);const meta=DB.g('moodRecMeta')||{};delete meta[key];DB.s('moodRecMeta',meta);renderView();toast('录音已删除','success')}
+
+// 每日文摘朗读
+let curMoodEssay=null,essayUtter=null,essayPlaying=false,essayIdx=0;
+function essaySetActive(i){document.querySelectorAll('.essay-p').forEach(el=>el.classList.remove('on'));if(i>=0){const el=document.getElementById('essay-para-'+i);if(el)el.classList.add('on')}}
+function essayBtnLabel(t){const b=document.getElementById('essayPlayBtn');if(b)b.textContent=t}
+function essaySpeak(i){
+  if(!curMoodEssay)return;
+  speechSynthesis.cancel();essayIdx=i;
+  const p=curMoodEssay.ps[i];
+  essayUtter=new SpeechSynthesisUtterance(p);
+  essayUtter.lang='zh-CN';essayUtter.rate=0.95;
+  essayUtter.onend=()=>{if(i+1<curMoodEssay.ps.length){essaySpeak(i+1)}else{essayPlaying=false;essaySetActive(-1);essayBtnLabel('▶ 朗读全文')}};
+  essayUtter.onerror=()=>{essayPlaying=false;essaySetActive(-1);essayBtnLabel('▶ 朗读全文')};
+  speechSynthesis.speak(essayUtter);essayPlaying=true;essaySetActive(i);essayBtnLabel('⏸ 暂停');
+}
+function essayToggle(){if(!curMoodEssay)return;if(essayPlaying){speechSynthesis.cancel();essayPlaying=false;essaySetActive(-1);essayBtnLabel('▶ 朗读全文')}else{essaySpeak(essayIdx>=curMoodEssay.ps.length?0:essayIdx)}}
+
+V.mood=function(){
+  const vd=moodSelDate;
+  const topics=moodTopicsToday(vd);
+  const essay=moodEssayToday(vd);
+  curMoodEssay=essay;
+  const meta=DB.g('moodRecMeta')||{};
+  const entries=(DB.g('moodEntries')||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
+  const recCard=(idx)=>{
+    const key=vd+'_'+idx;const m=meta[key];const rec=recState;
+    if(rec.active&&rec.idx===idx)return `<div class="topic-ctrl"><button class="rec-btn rec active" onclick="stopRec()">⏹ 停止 <span id="recTimer">${fmtRec(rec.secs)}</span></button></div>`;
+    if(rec.requesting&&rec.idx===idx)return `<div class="topic-ctrl"><button class="rec-btn rec" disabled>🎤 准备中…</button></div>`;
+    if(m)return `<div class="topic-ctrl">
+      <button class="rec-btn play" onclick="playRec('${key}')">▶ 播放</button>
+      <span class="rec-dur">⏱ ${fmtRec(m.dur)}</span>
+      <button class="rec-btn del" onclick="delRec('${key}')">🗑 删除</button>
+      <button class="rec-btn rec" onclick="startRec(${idx})">🎤 重录</button>
+    </div>`;
+    return `<div class="topic-ctrl"><button class="rec-btn rec" onclick="startRec(${idx})">🎤 朗读录音</button></div>`;
+  };
+  return `
+    <div class="mood-head">
+      <div class="mh-emoji">💗</div>
+      <div class="mh-t">心情空间</div>
+      <div class="mh-s">记下今天的心情，朗读三个话题，听一篇精美文摘</div>
+    </div>
+
+    <div class="cd">
+      <div class="dh-row">
+        <label class="lbl" style="margin:0">📅 日期（可选）</label>
+        <input type="date" class="inp" id="moodDate" value="${vd}" onchange="moodOnDate(this.value)" style="max-width:170px">
+      </div>
+      <div class="dh-moods">${MOOD_MOODS.map(m=>`<button class="mood-b${m===moodDraftMood?' on':''}" onclick="moodSetMood('${m}')">${m}</button>`).join('')}</div>
+      <textarea class="txa" id="moodNote" placeholder="今天心情怎么样？写几句话吧～ 🌸" maxlength="2000">${esc(moodDraftNote)}</textarea>
+      <button class="btn btn-p btn-sm" onclick="saveMood()" style="width:100%;justify-content:center;margin-top:12px">💖 保存心情</button>
+    </div>
+
+    <div class="mood-sec"><span class="ms-ic">🗣️</span> 每日表达话题 <span class="ms-sub">每天 3 个 · 点「朗读录音」读出你的回答</span></div>
+    ${topics.map((q,i)=>`<div class="topic-card">
+      <div class="topic-num">${i+1}</div>
+      <div class="topic-q">${esc(q)}</div>
+      ${recCard(i)}
+    </div>`).join('')}
+
+    <div class="mood-sec"><span class="ms-ic">📖</span> 每日文摘 <span class="ms-sub">${esc(essay.author)} · 可朗读</span></div>
+    <div class="essay-card">
+      <div class="essay-t">${esc(essay.title)}</div>
+      <div class="essay-a">—— ${esc(essay.author)}</div>
+      ${essay.ps.map((p,i)=>`<div class="essay-p" id="essay-para-${i}">${esc(p)}</div>`).join('')}
+      <div class="essay-ctrl"><button class="btn btn-p btn-sm" id="essayPlayBtn" onclick="essayToggle()">▶ 朗读全文</button></div>
+    </div>
+
+    ${entries.length?`<div class="cd"><div class="ch"><div class="ct"><span class="ic2">🌟</span> 往日心情</div><span class="cs">共 ${entries.length} 篇</span></div>
+      ${entries.map(e=>`<div class="dl">
+        <div class="dl-h"><span class="dl-d">${e.date}</span><span class="dl-m">${e.mood||'😊'}</span></div>
+        ${e.note?`<div class="dl-t">${esc(e.note).replace(/\n/g,'<br>')}</div>`:''}
+        <div class="dl-f"><button class="btn btn-d btn-sm" onclick="delMood('${e.id}')">删除</button></div>
+      </div>`).join('')}
+    </div>`:'<div class="empty"><div class="ei">💗</div><div class="et">还没有心情记录，写下第一篇吧</div></div>'}
   `;
 };
 
