@@ -481,13 +481,14 @@ function delTodo(id){
 // ─── 英语练习 ────────────────────────────────────────
 let curWords=DB.g('dailyWords')||[];
 function refreshWords(){curWords=pickN(WORDS,10);DB.s('dailyWords',curWords);renderView()}
-function articleByDate(){
+function articleByDate(offset=0){
   const today=fmtD(Date.now()).replace(/-/g,'');
   const seed=parseInt(today,10);
-  return ARTICLES[seed%ARTICLES.length];
+  return ARTICLES[(seed+offset)%ARTICLES.length];
 }
 let curArticle=DB.g('dailyArticle')||articleByDate();
-function refreshArticle(){curArticle=articleByDate();DB.s('dailyArticle',curArticle);renderView()}
+let articleOffset=DB.g('articleOffset')||0;
+function refreshArticle(){articleOffset=(articleOffset+1)%ARTICLES.length;curArticle=articleByDate(articleOffset);DB.s('articleOffset',articleOffset);DB.s('dailyArticle',curArticle);renderView()}
 V.english=function(){
   if(!curWords.length)curWords=pickN(WORDS,10);
   if(!curArticle)curArticle=articleByDate();
@@ -1169,9 +1170,9 @@ function checkDailyRefresh(){
   const now=new Date();
   if(now.getHours()>=hour){
     DB.s('lastRefreshDate',today);
-    refreshWords();refreshOutfit();refreshPhoto();refreshPhotoInsp();refreshFin();refreshBook();refreshVideo();nextExpr();refreshArticle();
+    refreshWords();refreshOutfit();refreshPhoto();refreshPhotoInsp();refreshFin();refreshBook();refreshVideo();nextExpr();articleOffset=0;curArticle=articleByDate(0);
     DB.s('dailyWords',curWords);DB.s('dailyOutfit',curOutfit);DB.s('dailyPhoto',curPhoto);DB.s('dailyPhotoInsp',curPhotoInsp);
-    DB.s('dailyFin',curFin);DB.s('dailyBook',curBook);DB.s('dailyVideo',curVideo);DB.s('dailyExpr',curExpr);DB.s('dailyListen',curListen);DB.s('dailyLogic',curLogic);DB.s('dailyArticle',curArticle);
+    DB.s('dailyFin',curFin);DB.s('dailyBook',curBook);DB.s('dailyVideo',curVideo);DB.s('dailyExpr',curExpr);DB.s('dailyListen',curListen);DB.s('dailyLogic',curLogic);DB.s('articleOffset',articleOffset);DB.s('dailyArticle',curArticle);
     toast('每日内容已刷新','success');
   }
 }
