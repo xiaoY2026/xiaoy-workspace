@@ -442,17 +442,38 @@ V.todo=function(){
   const items=DB.g('todos')||[];
   const done=items.filter(i=>i.done).length;
   const total=items.length;
+  const pend=total-done;
+  const rate=total?Math.round(done/total*100):0;
+  const checked=todayChecked();
   return `
-    <div class="cd"><div class="ch"><div class="ct"><span class="ic2">✓</span> 待办事项</div><span class="cs">今日任务清单</span></div>
-    <div class="tst">
-      <div class="tst-i"><div class="n">${total}</div><div class="l">总任务</div></div>
-      <div class="tst-i"><div class="n">${done}</div><div class="l">已完成</div></div>
-      <div class="tst-i"><div class="n">${total-done}</div><div class="l">待完成</div></div>
+    <div class="cd" style="background:var(--gac);border:none;color:#fff;box-shadow:0 6px 18px rgba(217,122,150,.25)">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div>
+          <div style="font-size:22px;font-weight:700;letter-spacing:1px"><span id="todoClock">${nowStr()}</span></div>
+          <div style="font-size:11px;opacity:.85;margin-top:3px">${todayLabel()}</div>
+        </div>
+        <div style="text-align:center;flex-shrink:0">
+          <div style="font-size:22px;font-weight:700">${DB.g('checkinStreak')||0}</div>
+          <div style="font-size:10px;opacity:.85">连续打卡</div>
+        </div>
+        <button class="btn ${checked?'':'btn-p'}" onclick="doCheckin()" style="${checked?'background:rgba(255,255,255,.28);color:#fff;border:none;padding:10px 14px':''}">${checked?'今日已打卡 ✓':'今日打卡'}</button>
+      </div>
     </div>
-    <div class="ti-row"><input class="inp" id="todoIn" placeholder="添加新任务…" maxlength="100"><button class="btn btn-p btn-sm" onclick="addTodo()">添加</button></div>
-    <ul class="tl" id="todoList">${items.map(i=>todoItemHTML(i)).join('')}</ul>
-    ${items.length===0?'<div class="empty"><div class="ei">📝</div><div class="et">还没有任务，添加一个开始吧</div></div>':''}
-  </div>`;
+    <div class="cd" style="padding:14px 16px;background:rgba(255,248,250,.92)">
+      <div style="font-size:13px;color:var(--t2);line-height:1.6">“${dailyQuote()}”</div>
+    </div>
+    <div class="cd">
+      <div class="ch"><div class="ct"><span class="ic2">✓</span> 待办事项</div><span class="cs">今日事今日毕，每天都是新的开始</span></div>
+      <div class="wg">
+        <div class="wc"><div class="ww">${total}</div><div class="wp">今日任务</div></div>
+        <div class="wc"><div class="ww" style="color:#5a9a30">${done}</div><div class="wp">已完成</div></div>
+        <div class="wc"><div class="ww" style="color:#c98a2e">${pend}</div><div class="wp">待完成</div></div>
+        <div class="wc"><div class="ww" style="color:var(--p40)">${rate}%</div><div class="wp">完成率</div></div>
+      </div>
+      <div class="ti-row"><input class="inp" id="todoIn" placeholder="添加新任务…" maxlength="100"><button class="btn btn-p btn-sm" onclick="addTodo()">添加</button></div>
+      <ul class="tl" id="todoList">${items.map(i=>todoItemHTML(i)).join('')}</ul>
+      ${items.length===0?'<div class="empty"><div class="ei">📝</div><div class="et">还没有任务，添加一个开始吧</div></div>':''}
+    </div>`;
 };
 function todoItemHTML(i){
   return `<li class="ti-item${i.done?' done':''}" data-id="${i.id}">
@@ -476,6 +497,19 @@ function togTodo(id){
 function delTodo(id){
   const items=DB.g('todos')||[];
   DB.s('todos',items.filter(x=>x.id!==id));renderView();toast('任务已删除','success');
+}
+function nowStr(){return new Date().toTimeString().slice(0,8)}
+function todayLabel(){const d=new Date();const wk=['日','一','二','三','四','五','六'][d.getDay()];return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 星期${wk}`}
+function dailyQuote(){const Q=['愿你成为自己的太阳，无需凭借谁的光。','星光不问赶路人，时光不负有心人。','你现在所有的努力，都是为未来积攒底气。','把时间花在哪里，哪里就会开花。','温柔且坚定，是最好的生活态度。','今天的努力，是幸运的伏笔。','慢慢来，比较快。','你只管努力，剩下的交给时间。'];const t=fmtD(Date.now());return Q[parseInt(t.replace(/-/g,''),10)%Q.length]}
+function todayChecked(){return DB.g('lastCheckin')===fmtD(Date.now())}
+function doCheckin(){
+  const today=fmtD(Date.now());
+  if(DB.g('lastCheckin')===today)return toast('今天已经打卡啦','success');
+  let streak=DB.g('checkinStreak')||0;
+  const yest=fmtD(Date.now()-86400000);
+  streak=(DB.g('lastCheckin')===yest)?streak+1:1;
+  DB.s('checkinStreak',streak);DB.s('lastCheckin',today);
+  renderView();toast('打卡成功，已连续 '+streak+' 天','success');
 }
 
 // ─── 英语练习 ────────────────────────────────────────
@@ -699,6 +733,7 @@ V.accounting=function(){
     ${Object.keys(expByCat).length?`<div class="cd"><div class="ch"><div class="ct">支出分类</div></div>
       <div style="display:flex;flex-wrap:wrap;gap:8px">${Object.entries(expByCat).map(([c,a])=>`<span class="tag">${esc(c)} ¥${a.toFixed(0)}</span>`).join('')}</div>
     </div>`:''}
+    ${donutSVG(expByCat)}
     <div class="cd"><div class="ch"><div class="ct">收支明细</div></div>
       ${monthRecords.length?monthRecords.slice().reverse().map(r=>`<div class="ri">
         <span class="rt ${r.type}">${r.type==='inc'?'收入':'支出'}</span>
@@ -732,6 +767,30 @@ function setBudget(){
 function saveBudget(){
   const amt=parseFloat(document.getElementById('bAmt').value);
   DB.s('budget',amt||0);closeM();renderView();toast('预算已设置','success');
+}
+function donutSVG(expByCat){
+  const cats=EXP_CATS.filter(c=>expByCat[c]);
+  const total=cats.reduce((s,c)=>s+expByCat[c],0);
+  if(!total)return '';
+  const colors={餐饮:'#D4537E',交通:'#378ADD',购物:'#639922',房租:'#BA7517',娱乐:'#534AB7',其他:'#9a8f86'};
+  const R=58,C=2*Math.PI*R;let off=0,arcs='';
+  cats.forEach(c=>{
+    const len=expByCat[c]/total*C;
+    arcs+=`<circle cx="80" cy="80" r="${R}" fill="none" stroke="${colors[c]}" stroke-width="18" stroke-dasharray="${len.toFixed(2)} ${(C-len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 80 80)"></circle>`;
+    off+=len;
+  });
+  const legend=cats.map(c=>`<div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;font-size:12px"><span style="width:10px;height:10px;border-radius:3px;background:${colors[c]};display:inline-block;flex-shrink:0"></span><span style="flex:1;color:var(--t2)">${esc(c)}</span><span style="color:var(--t1);font-weight:600">${Math.round(expByCat[c]/total*100)}%</span><span style="color:var(--t1);font-weight:600;min-width:48px;text-align:right">¥${expByCat[c].toFixed(0)}</span></div>`).join('');
+  return `<div class="cd"><div class="ch"><div class="ct"><span class="ic2">📊</span> 支出占比</div><span class="cs">本月各类支出分布</span></div>
+    <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+      <svg viewBox="0 0 160 160" width="160" height="160" style="flex-shrink:0;max-width:45%">
+        <circle cx="80" cy="80" r="${R}" fill="none" stroke="var(--p10)" stroke-width="18"></circle>
+        ${arcs}
+        <text x="80" y="74" text-anchor="middle" font-size="12" fill="var(--t3)">总支出</text>
+        <text x="80" y="98" text-anchor="middle" font-size="19" font-weight="700" fill="var(--p40)">¥${total.toFixed(0)}</text>
+      </svg>
+      <div style="flex:1;min-width:150px">${legend}</div>
+    </div>
+  </div>`;
 }
 
 // ─── 新闻热点 ────────────────────────────────────────
@@ -1184,6 +1243,7 @@ function init(){
   renderTop();
   renderNav();
   renderView();
+  setInterval(()=>{const e=document.getElementById('todoClock');if(e)e.textContent=new Date().toTimeString().slice(0,8)},1000);
   // Load news data from news.json
   fetch('./news.json').then(r=>r.json()).then(d=>{
     if(d&&d.news){DB.s('newsData',d.news);localStorage.setItem('xy_newsRaw',JSON.stringify(d))}
