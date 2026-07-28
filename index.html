@@ -492,7 +492,7 @@ const NAV=[
   {id:'expression',ic:'💬',lb:'语言表达'},
   {id:'photo',ic:'📷',lb:'摄影审美'},
   {id:'savings',ic:'💰',lb:'存钱目标'},
-  {id:'mood',ic:'💗',lb:'心情空间'}
+  {id:'diary',ic:'💗',lb:'心情空间'}
 ];
 function renderNav(){
   const nav=document.getElementById('sbNav');
@@ -969,6 +969,7 @@ function nextExpr(){
 }
 V.expression=function(){
   const records=DB.g('exprRecords')||[];
+  curExprEssay=exprEssayToday(exprSelDate);
   return `
     <div class="cd"><div class="ch"><div class="ct"><span class="ic2">💬</span> 语言表达</div>
       <button class="btn btn-s btn-sm" onclick="nextExpr()">换一批</button></div>
@@ -1001,6 +1002,27 @@ V.expression=function(){
         <p>• 敢停顿=敢控场——沉默是力量</p>
         <p>• 3句话输出法——简洁是最高级的能力</p>
         <p>• 重复对方关键词——我听见了你</p>
+      </div>
+    </div>
+
+    <div class="cd"><div class="ch"><div class="ct"><span class="ic2">🗣️</span> 每日朗读练习</div>
+      <span class="cs">每天 3 个话题 · 读出你的回答并录音</span></div>
+      <div class="dh-row">
+        <label class="lbl" style="margin:0">📅 日期（可选）</label>
+        <input type="date" class="inp" id="exprDate" value="${exprSelDate}" onchange="exprOnDate(this.value)" style="max-width:170px">
+      </div>
+      ${exprTopicsToday(exprSelDate).map((q,i)=>`<div class="topic-card">
+        <div class="topic-num">${i+1}</div>
+        <div class="topic-q">${esc(q)}</div>
+        ${exprRecCard(i)}
+      </div>`).join('')}
+    </div>
+    <div class="cd"><div class="ch"><div class="ct"><span class="ic2">📖</span> 每日文摘</div><span class="cs">可朗读 · 静心听一篇</span></div>
+      <div class="essay-card">
+        <div class="essay-t">${esc(exprEssayToday(exprSelDate).title)}</div>
+        <div class="essay-a">—— ${esc(exprEssayToday(exprSelDate).author)}</div>
+        ${exprEssayToday(exprSelDate).ps.map((p,i)=>`<div class="essay-p" id="essay-para-${i}">${esc(p)}</div>`).join('')}
+        <div class="essay-ctrl"><button class="btn btn-p btn-sm" id="essayPlayBtn" onclick="essayToggle()">▶ 朗读全文</button></div>
       </div>
     </div>`;
 };
@@ -1168,8 +1190,8 @@ V.diary=function(){
   const entries=(DB.g('diary')||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
   return `
     <div class="diary-head">
-      <div class="dh-emoji">📔</div>
-      <div class="dh-t">我的小日记</div>
+      <div class="dh-emoji">💗</div>
+      <div class="dh-t">心情空间</div>
       <div class="dh-s">今天也要开心呀 🐻 选个日期，写下心情和故事</div>
     </div>
     <div class="cd">
@@ -1196,8 +1218,7 @@ V.diary=function(){
   `;
 };
 
-// ─── 心情空间 ────────────────────────────────────────
-const MOOD_MOODS=['😊','🥰','😌','🤔','😢','😴','😤','🌟'];
+// ─── 每日朗读练习（语言表达模块复用） ─────────────────
 const MOOD_TOPICS=[
   '用三个词语形容你今天的心情，并说说为什么。',
   '今天最让你感恩的一件小事是什么？',
@@ -1250,18 +1271,22 @@ const AUD=(()=>{
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function daySeed(d){const dt=new Date(d+'T00:00:00');const base=new Date(dt.getFullYear()+'-01-01T00:00:00');return Math.floor((dt-base)/86400000)+1}
 function seededShuffle(arr,seed){const r=mulberry32(seed);const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function moodTopicsToday(d){const seed=daySeed(d||fmtD(Date.now()));return seededShuffle(MOOD_TOPICS,seed).slice(0,3)}
-function moodEssayToday(d){const seed=daySeed(d||fmtD(Date.now()));return MOOD_ESSAYS[seed%MOOD_ESSAYS.length]}
-
-// 心情打卡
-let moodSelDate=fmtD(Date.now());
-let moodDraftMood='😊';
-let moodDraftNote='';
-function moodSyncNote(){const ta=document.getElementById('moodNote');if(ta)moodDraftNote=ta.value}
-function moodOnDate(d){moodSyncNote();moodSelDate=d;const es=DB.g('moodEntries')||[];const e=es.find(x=>x.date===d);if(e){moodDraftNote=e.note||'';moodDraftMood=e.mood||'😊'}else{moodDraftNote='';moodDraftMood='😊'}renderView()}
-function moodSetMood(m){moodSyncNote();moodDraftMood=m;renderView()}
-function saveMood(){moodSyncNote();const note=moodDraftNote.trim();if(!note)return toast('写点心情吧 💗','error');const es=DB.g('moodEntries')||[];const idx=es.findIndex(x=>x.date===moodSelDate);const e={id:uid(),date:moodSelDate,mood:moodDraftMood,note};if(idx>=0){e.id=es[idx].id;es[idx]=e}else es.push(e);es.sort((a,b)=>b.date.localeCompare(a.date));DB.s('moodEntries',es);moodDraftNote='';renderView();toast('心情已记下 ✨','success')}
-function delMood(id){const es=DB.g('moodEntries')||[];DB.s('moodEntries',es.filter(x=>x.id!==id));renderView();toast('已删除','success')}
+function exprTopicsToday(d){const seed=daySeed(d||fmtD(Date.now()));return seededShuffle(MOOD_TOPICS,seed).slice(0,3)}
+function exprEssayToday(d){const seed=daySeed(d||fmtD(Date.now()));return MOOD_ESSAYS[seed%MOOD_ESSAYS.length]}
+let exprSelDate=fmtD(Date.now());
+function exprOnDate(d){exprSelDate=d;renderView()}
+function exprRecCard(idx){
+  const vd=exprSelDate;const key=vd+'_'+idx;const meta=DB.g('exprRecMeta')||{};const m=meta[key];const rec=recState;
+  if(rec.active&&rec.idx===idx&&rec.date===vd)return `<div class="topic-ctrl"><button class="rec-btn rec active" onclick="stopRec()">⏹ 停止 <span id="recTimer">${fmtRec(rec.secs)}</span></button></div>`;
+  if(rec.requesting&&rec.idx===idx&&rec.date===vd)return `<div class="topic-ctrl"><button class="rec-btn rec" disabled>🎤 准备中…</button></div>`;
+  if(m)return `<div class="topic-ctrl">
+    <button class="rec-btn play" onclick="playRec('${key}')">▶ 播放</button>
+    <span class="rec-dur">⏱ ${fmtRec(m.dur)}</span>
+    <button class="rec-btn del" onclick="delRec('${key}')">🗑 删除</button>
+    <button class="rec-btn rec" onclick="startRec(${idx})">🎤 重录</button>
+  </div>`;
+  return `<div class="topic-ctrl"><button class="rec-btn rec" onclick="startRec(${idx})">🎤 朗读录音</button></div>`;
+}
 
 // 录音（朗读话题）
 let recState={idx:null,active:false,secs:0,mr:null,chunks:[],stream:null,timer:null,requesting:false};
@@ -1270,7 +1295,7 @@ function startRec(idx){
   if(recState.active||recState.requesting)return;
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder)return toast('当前环境不支持录音 🎤','error');
   speechSynthesis.cancel();
-  recState={idx,active:false,secs:0,mr:null,chunks:[],stream:null,timer:null,requesting:true};
+  recState={idx,active:false,secs:0,mr:null,chunks:[],stream:null,timer:null,requesting:true,date:exprSelDate};
   renderView();
   navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
     recState.stream=stream;
@@ -1291,102 +1316,41 @@ function stopRec(){if(recState.mr&&recState.mr.state!=='inactive')recState.mr.st
 function saveRec(idx){
   if(!recState.chunks.length){recState={idx:null,active:false,secs:0,mr:null,chunks:[],stream:null,timer:null,requesting:false};return renderView()}
   const blob=new Blob(recState.chunks,{type:recState.chunks[0]?recState.chunks[0].type:'audio/webm'});
-  const dur=recState.secs;const date=moodSelDate;const key=date+'_'+idx;
-  recState={idx:null,active:false,secs:0,mr:null,chunks:[],stream:null,timer:null,requesting:false};
-  AUD.put('mood_'+key,blob).then(()=>{
-    const meta=DB.g('moodRecMeta')||{};
+  const dur=recState.secs;const date=recState.date||exprSelDate;const key=date+'_'+idx;
+  recState={idx:null,active:false,secs:0,mr:null,chunks:[],stream:null,timer:null,requesting:false,date:null};
+  AUD.put('expr_'+key,blob).then(()=>{
+    const meta=DB.g('exprRecMeta')||{};
     meta[key]={date,idx,dur};
-    DB.s('moodRecMeta',meta);
+    DB.s('exprRecMeta',meta);
     renderView();toast('朗读录音已保存 🎉','success');
   }).catch(()=>toast('录音保存失败，请稍后重试','error'));
 }
 function playRec(key){
-  const meta=(DB.g('moodRecMeta')||{})[key];if(!meta)return;
-  AUD.get('mood_'+key).then(blob=>{
+  const meta=(DB.g('exprRecMeta')||{})[key];if(!meta)return;
+  AUD.get('expr_'+key).then(blob=>{
     if(!blob)return toast('录音丢失，请重新录制','error');
     const url=URL.createObjectURL(blob);const a=new Audio(url);
     a.onended=()=>URL.revokeObjectURL(url);
     a.play().catch(()=>toast('播放失败','error'));
   });
 }
-function delRec(key){AUD.del('mood_'+key);const meta=DB.g('moodRecMeta')||{};delete meta[key];DB.s('moodRecMeta',meta);renderView();toast('录音已删除','success')}
+function delRec(key){AUD.del('expr_'+key);const meta=DB.g('exprRecMeta')||{};delete meta[key];DB.s('exprRecMeta',meta);renderView();toast('录音已删除','success')}
 
 // 每日文摘朗读
-let curMoodEssay=null,essayUtter=null,essayPlaying=false,essayIdx=0;
+let curExprEssay=null,essayUtter=null,essayPlaying=false,essayIdx=0;
 function essaySetActive(i){document.querySelectorAll('.essay-p').forEach(el=>el.classList.remove('on'));if(i>=0){const el=document.getElementById('essay-para-'+i);if(el)el.classList.add('on')}}
 function essayBtnLabel(t){const b=document.getElementById('essayPlayBtn');if(b)b.textContent=t}
 function essaySpeak(i){
-  if(!curMoodEssay)return;
+  if(!curExprEssay)return;
   speechSynthesis.cancel();essayIdx=i;
-  const p=curMoodEssay.ps[i];
+  const p=curExprEssay.ps[i];
   essayUtter=new SpeechSynthesisUtterance(p);
   essayUtter.lang='zh-CN';essayUtter.rate=0.95;
-  essayUtter.onend=()=>{if(i+1<curMoodEssay.ps.length){essaySpeak(i+1)}else{essayPlaying=false;essaySetActive(-1);essayBtnLabel('▶ 朗读全文')}};
+  essayUtter.onend=()=>{if(i+1<curExprEssay.ps.length){essaySpeak(i+1)}else{essayPlaying=false;essaySetActive(-1);essayBtnLabel('▶ 朗读全文')}};
   essayUtter.onerror=()=>{essayPlaying=false;essaySetActive(-1);essayBtnLabel('▶ 朗读全文')};
   speechSynthesis.speak(essayUtter);essayPlaying=true;essaySetActive(i);essayBtnLabel('⏸ 暂停');
 }
-function essayToggle(){if(!curMoodEssay)return;if(essayPlaying){speechSynthesis.cancel();essayPlaying=false;essaySetActive(-1);essayBtnLabel('▶ 朗读全文')}else{essaySpeak(essayIdx>=curMoodEssay.ps.length?0:essayIdx)}}
-
-V.mood=function(){
-  const vd=moodSelDate;
-  const topics=moodTopicsToday(vd);
-  const essay=moodEssayToday(vd);
-  curMoodEssay=essay;
-  const meta=DB.g('moodRecMeta')||{};
-  const entries=(DB.g('moodEntries')||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
-  const recCard=(idx)=>{
-    const key=vd+'_'+idx;const m=meta[key];const rec=recState;
-    if(rec.active&&rec.idx===idx)return `<div class="topic-ctrl"><button class="rec-btn rec active" onclick="stopRec()">⏹ 停止 <span id="recTimer">${fmtRec(rec.secs)}</span></button></div>`;
-    if(rec.requesting&&rec.idx===idx)return `<div class="topic-ctrl"><button class="rec-btn rec" disabled>🎤 准备中…</button></div>`;
-    if(m)return `<div class="topic-ctrl">
-      <button class="rec-btn play" onclick="playRec('${key}')">▶ 播放</button>
-      <span class="rec-dur">⏱ ${fmtRec(m.dur)}</span>
-      <button class="rec-btn del" onclick="delRec('${key}')">🗑 删除</button>
-      <button class="rec-btn rec" onclick="startRec(${idx})">🎤 重录</button>
-    </div>`;
-    return `<div class="topic-ctrl"><button class="rec-btn rec" onclick="startRec(${idx})">🎤 朗读录音</button></div>`;
-  };
-  return `
-    <div class="mood-head">
-      <div class="mh-emoji">💗</div>
-      <div class="mh-t">心情空间</div>
-      <div class="mh-s">记下今天的心情，朗读三个话题，听一篇精美文摘</div>
-    </div>
-
-    <div class="cd">
-      <div class="dh-row">
-        <label class="lbl" style="margin:0">📅 日期（可选）</label>
-        <input type="date" class="inp" id="moodDate" value="${vd}" onchange="moodOnDate(this.value)" style="max-width:170px">
-      </div>
-      <div class="dh-moods">${MOOD_MOODS.map(m=>`<button class="mood-b${m===moodDraftMood?' on':''}" onclick="moodSetMood('${m}')">${m}</button>`).join('')}</div>
-      <textarea class="txa" id="moodNote" placeholder="今天心情怎么样？写几句话吧～ 🌸" maxlength="2000">${esc(moodDraftNote)}</textarea>
-      <button class="btn btn-p btn-sm" onclick="saveMood()" style="width:100%;justify-content:center;margin-top:12px">💖 保存心情</button>
-    </div>
-
-    <div class="mood-sec"><span class="ms-ic">🗣️</span> 每日表达话题 <span class="ms-sub">每天 3 个 · 点「朗读录音」读出你的回答</span></div>
-    ${topics.map((q,i)=>`<div class="topic-card">
-      <div class="topic-num">${i+1}</div>
-      <div class="topic-q">${esc(q)}</div>
-      ${recCard(i)}
-    </div>`).join('')}
-
-    <div class="mood-sec"><span class="ms-ic">📖</span> 每日文摘 <span class="ms-sub">${esc(essay.author)} · 可朗读</span></div>
-    <div class="essay-card">
-      <div class="essay-t">${esc(essay.title)}</div>
-      <div class="essay-a">—— ${esc(essay.author)}</div>
-      ${essay.ps.map((p,i)=>`<div class="essay-p" id="essay-para-${i}">${esc(p)}</div>`).join('')}
-      <div class="essay-ctrl"><button class="btn btn-p btn-sm" id="essayPlayBtn" onclick="essayToggle()">▶ 朗读全文</button></div>
-    </div>
-
-    ${entries.length?`<div class="cd"><div class="ch"><div class="ct"><span class="ic2">🌟</span> 往日心情</div><span class="cs">共 ${entries.length} 篇</span></div>
-      ${entries.map(e=>`<div class="dl">
-        <div class="dl-h"><span class="dl-d">${e.date}</span><span class="dl-m">${e.mood||'😊'}</span></div>
-        ${e.note?`<div class="dl-t">${esc(e.note).replace(/\n/g,'<br>')}</div>`:''}
-        <div class="dl-f"><button class="btn btn-d btn-sm" onclick="delMood('${e.id}')">删除</button></div>
-      </div>`).join('')}
-    </div>`:'<div class="empty"><div class="ei">💗</div><div class="et">还没有心情记录，写下第一篇吧</div></div>'}
-  `;
-};
+function essayToggle(){if(!curExprEssay)return;if(essayPlaying){speechSynthesis.cancel();essayPlaying=false;essaySetActive(-1);essayBtnLabel('▶ 朗读全文')}else{essaySpeak(essayIdx>=curExprEssay.ps.length?0:essayIdx)}}
 
 // ─── 绑定视图事件 ─────────────────────────────────────
 function bindView(v){
