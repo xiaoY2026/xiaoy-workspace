@@ -106,6 +106,34 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:l
 .toast-c{right:10px;left:10px}
 }
 @media(min-width:901px){.tb.menu-btn{display:none}.ov{display:none!important}}
+/* 日记模块 · 可爱风 */
+.diary-head{text-align:center;padding:18px 14px;background:var(--gpk);border-radius:var(--r3);margin-bottom:14px;box-shadow:var(--s1);position:relative;overflow:hidden}
+.diary-head::before{content:'🌸';position:absolute;top:8px;left:14px;font-size:18px;opacity:.65}
+.diary-head::after{content:'✨';position:absolute;top:10px;right:16px;font-size:16px;opacity:.65}
+.dh-emoji{font-size:34px;line-height:1}
+.dh-t{font-size:18px;font-weight:700;color:var(--p60);margin-top:4px}
+.dh-s{font-size:12px;color:var(--p50);margin-top:4px}
+.dh-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.dh-moods{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.mood-b{width:36px;height:36px;border-radius:50%;border:2px solid var(--bd);background:var(--cream);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--t);padding:0}
+.mood-b:hover{border-color:var(--p40);transform:scale(1.08)}
+.mood-b.on{border-color:var(--p50);background:var(--p20);box-shadow:0 3px 10px rgba(217,122,150,.25)}
+.dh-imgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.dh-img{position:relative;width:74px;height:74px;border-radius:14px;overflow:hidden;border:2px solid var(--p20);box-shadow:var(--s1)}
+.dh-img img{width:100%;height:100%;object-fit:cover;display:block}
+.dh-x{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(107,68,88,.7);color:#fff;font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.dh-add{width:74px;height:74px;border-radius:14px;border:2px dashed var(--bd2);background:var(--p10);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--p40);cursor:pointer;transition:var(--t)}
+.dh-add:hover{background:var(--p20);border-color:var(--p40)}
+.dl{background:var(--cream);border-radius:var(--r2);padding:14px;margin-bottom:12px;border:1px solid var(--bd);transition:var(--t);position:relative}
+.dl:hover{border-color:var(--bd2);box-shadow:var(--s1)}
+.dl-h{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.dl-d{font-size:13px;font-weight:600;color:var(--p50)}
+.dl-m{font-size:18px}
+.dl-t{font-size:14px;color:var(--t1);line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.dl-imgs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.dl-img{width:70px;height:70px;border-radius:12px;object-fit:cover;border:1px solid var(--bd);cursor:pointer;transition:var(--t)}
+.dl-img:hover{transform:scale(1.05);box-shadow:var(--s2)}
+.dl-f{display:flex;justify-content:flex-end;margin-top:8px}
 </style>
 </head>
 <body>
@@ -302,32 +330,7 @@ const FIN_TIPS=[
 {cat:"基础",t:"学一点税务知识",d:"了解个人所得税专项附加扣除，充分利用住房贷款、子女教育、继续教育等扣除项。每年可能省几千块。",tip:"税务知识=合法省钱，比理财收益更确定更直接"}
 ];
 
-const BOOKS=[
-{cat:"成长",t:"《原子习惯》",a:"James Clear",d:"微小习惯的复利效应惊人。每天进步1%，一年后你将变成37倍好的自己。关键是让好习惯变得显而易见、有吸引力、简单易行、令人愉悦。",k:"习惯叠加法：在现有习惯后叠加新习惯；两分钟法则：新习惯从2分钟版本开始"},
-{cat:"成长",t:"《认知觉醒》",a:"周岭",d:"认知决定选择，选择决定命运。这本书帮你理解大脑运行机制，从潜意识层面改变行为模式。不是鸡汤，而是认知科学的应用指南。",k:"元认知能力是最高级的能力——观察自己的思考过程"},
-{cat:"成长",t:"《刻意练习》",a:" Anders Ericsson",d:"天才不是天生的，是刻意练习的结果。关键要素：明确目标、专注投入、及时反馈、跳出舒适区。10000小时定律的核心是'刻意'而非'重复'。",k:"反馈回路：没有反馈的练习是低效的；舒适区边缘是最佳练习区域"},
-{cat:"成长",t:"《精进》",a:"采铜",d:"如何成为一个很厉害的人？不是学更多知识，而是优化时间、选择、行动、思维、才能五个维度。厉害是系统性优势而非单点突破。",k:"时间投资观：把时间当资源而非消耗；半衰期决策法：优先长半衰期选择"},
-{cat:"文学",t:"《活着》",a:"余华",d:"一部让你理解生命重量的小说。福贵经历所有苦难依然活着，活着本身就是最大的勇气。不是鸡汤是手术刀——剖开生活给你看真实的重量。",k:"余华的极简叙事让痛苦更刺骨——没有修饰的苦难最震撼"},
-{cat:"文学",t:"《百年孤独》",a:"马尔克斯",d:"一个家族七代人的轮回故事。每个人都在重复前人的命运，像是在一个巨大的时间漩涡里打转。魔幻现实主义巅峰之作。",k:"孤独不是状态而是宿命——家族的每个人最终都回到孤独"},
-{cat:"文学",t:"《小王子》",a:"圣埃克苏佩里",d:"看似童话实则哲思。小王子从B612星球出发，遇见各种大人后发现：真正重要的东西眼睛看不见，只有心能看见。",k:"'驯养'概念——建立联系的过程让平凡变得独一无二"},
-{cat:"文学",t:"《人间失格》",a:"太宰治",d:"一个人试图融入社会却不断失败的告白。太宰治把社交恐惧、自我厌恶写得透彻入骨。不是教你堕落而是让你理解脆弱。",k:"理解黑暗才能守护光明——这是了解人类脆弱面的必读"},
-{cat:"心理",t:"《被讨厌的勇气》",a:"岸见一郎",d:"阿德勒心理学通俗解读。核心观点：人的一切烦恼都来自人际关系。获得幸福的途径是'课题分离'——分清什么是你的课题什么是别人的。",k:"课题分离：别人怎么评价你是别人的课题，你无法控制也不必在意"},
-{cat:"心理",t:"《也许你该找个人聊聊》",a:"Lori Gottlieb",d:"一个心理治疗师的诊疗实录。咨询师自己也在接受心理咨询。双向视角揭示：每个人都带着自己的伤痛在前行，承认脆弱才是勇敢的开始。",k:"治疗师也需要治疗——承认需要帮助是治愈的第一步"},
-{cat:"心理",t:"《心流》",a:"米哈里·契克森米哈赖",d:"什么是真正的快乐？不是休闲而是专注——当你全身心投入一件事，时间消失，自我消失，这就是心流。这是最优质的体验状态。",k:"心流条件：明确目标+即时反馈+挑战与技能匹配"},
-{cat:"心理",t:"《亲密关系》",a:"罗兰·米勒",d:"科学解读爱情和亲密关系。不是鸡汤而是实证研究：吸引力法则、依恋类型、冲突处理、维持策略。用数据理解感情比用直觉靠谱得多。",k:"安全型依恋是最好的关系基础——不是激情而是信任和回应"},
-{cat:"认知",t:"《思考，快与慢》",a:"卡尼曼",d:"人类有两套思维系统：快思维(直觉)和慢思维(理性)。多数决策被快思维主导导致偏差。理解这些偏差是做出更好决策的第一步。",k:"锚定效应、损失厌恶、确认偏误——这些偏差你每天都在犯"},
-{cat:"认知",t:"《穷查理宝典》",a:"彼得·考夫曼",d:"巴菲特搭档查理·芒格的智慧合集。核心思想：多元思维模型。用不同学科的思维工具看问题，比单一视角更准确更全面。",k:"'反过来想，总是反过来想'——逆向思维是解决复杂问题的利器"},
-{cat:"认知",t:"《事实》",a:"汉斯·罗斯林",d:"世界比你想象的更好。我们被新闻和偏见误导，以为世界在恶化。数据告诉我们：贫困减少、寿命延长、教育普及——趋势是积极的。",k:"十种本能偏差让你误判世界——学会用数据替代直觉"},
-{cat:"认知",t:"《模型思维》",a:"斯科特·佩奇",d:"单一模型解释不了复杂世界。你需要多种思维模型：正态分布、幂律分布、网络效应、博弈论…每种模型照亮不同角落。",k:"多模型思维=看到更多真相——不要只用电筒照一个方向"},
-{cat:"成长",t:"《终身成长》",a:"Carol Dweck",d:"固定型思维 vs 成长型思维。前者认为能力天定，后者认为能力可练。转变思维模式从'我不行'变成'我还没学会'，是一切改变的起点。",k:"把'失败'重新定义为'还没成功'——语言改变思维"},
-{cat:"成长",t:"《深度工作》",a:"Cal Newport",d:"在注意力稀缺时代，深度工作能力是最稀缺的竞争力。规则：排除干扰、设定专注时段、拒绝浅层任务。深度产出远胜浅层忙碌。",k:"每天4小时深度工作>12小时浅层忙碌——质量碾压数量"},
-{cat:"文学",t:"《月亮与六便士》",a:"毛姆",d:"一个证券经纪人抛弃一切去画画的故事。'满地都是六便士，他却抬头看见了月亮。'理想与现实的选择永远没有标准答案。",k:"不是鼓励抛弃现实而是提醒：别忘了抬头看月亮"},
-{cat:"文学",t:"《局外人》",a:"加缪",d:"默尔索不按社会规则演戏——母亲葬礼不哭、恋爱不表达、杀人只因太阳太刺眼。他被判死刑不是因为杀人而因为不合群。",k:"荒诞不是世界的属性而是人面对世界的感受——理解它才能超越它"},
-{cat:"心理",t:"《自卑与超越》",a:"阿德勒",d:"自卑感不是缺陷而是动力。每个人都有自卑，关键是如何转化——不是消除自卑而是用它驱动成长。补偿机制是最强大的成长引擎。",k:"自卑→补偿→超越——这不是鸡汤而是心理机制"},
-{cat:"心理",t:"《非暴力沟通》",a:"马歇尔·卢森堡",d:"四个步骤：观察→感受→需要→请求。不说'你总是迟到'而是说'你迟到时我感到焦虑，我需要确定感，能提前5分钟吗？'",k:"区分观察和评论——'你迟到'是评论，'你9:30到'是观察"},
-{cat:"认知",t:"《反脆弱》",a:"塔勒布",d:"脆弱的事物喜欢安宁，反脆弱的事物从混乱中成长。不要追求稳定——追求从不确定性中获益的能力。波动和压力是反脆弱者的营养。",k:"小挫折增强韧性——像肌肉需要阻力才能生长"},
-{cat:"认知",t:"《学会提问》",a:"尼尔·布朗",d:"批判性思维实操指南。面对任何观点先问：论据是什么？推理是否合理？有没有替代解释？提问的质量决定思考的质量。",k:"批判不是否定而是求真——先理解再判断"}
-];
+
 
 const EXPR=[
 {type:"课题",brief:"今天练一个让人印象深刻的开场",full:"开场白决定别人对你的第一印象。试试用有趣的观察或反问切入，比'大家好'更有吸引力。例：'你们有没有发现，最忙的人反而最有时间？'",tip:"开场三秒定胜负，用小钩子拉住注意力。"},
@@ -392,7 +395,7 @@ const NAV=[
   {id:'video',ic:'🎬',lb:'爆款视频'},
   {id:'savings',ic:'💰',lb:'存钱目标'},
   {id:'finance',ic:'📈',lb:'理财学习'},
-  {id:'books',ic:'📚',lb:'书籍探讨'}
+  {id:'diary',ic:'📔',lb:'日记'}
 ];
 function renderNav(){
   const nav=document.getElementById('sbNav');
@@ -1083,75 +1086,100 @@ function addFinLink(){
 }
 function rmFinLink(id){const links=DB.g('finLinks')||[];DB.s('finLinks',links.filter(x=>x.id!==id));renderView();toast('已移除','success')}
 
-// ─── 书籍探讨 ────────────────────────────────────────
-let curBook=DB.g('dailyBook')||[];
-function refreshBook(){curBook=pickN(BOOKS,4);DB.s('dailyBook',curBook);renderView()}
-V.books=function(){
-  if(!curBook.length)curBook=pickN(BOOKS,4);
-  const shelf=DB.g('bookShelf')||[];
-  const notes=DB.g('bookNotes')||[];
-  const toRead=shelf.filter(b=>b.status==='待读');
-  const reading=shelf.filter(b=>b.status==='在读');
-  const finished=shelf.filter(b=>b.status==='已读完');
+// ─── 日记 ────────────────────────────────────────
+let diarySelDate=fmtD(Date.now());
+let diaryDraftMood='😊';
+let diaryDraftText='';
+let diaryDraftImgs=[];
+const DIARY_MOODS=['😊','🥰','😎','🤔','😢','😴','😡','🌟'];
+function diarySyncText(){const ta=document.getElementById('diaryText');if(ta)diaryDraftText=ta.value}
+function diaryOnDate(d){
+  diarySyncText();
+  diarySelDate=d;
+  const entries=DB.g('diary')||[];
+  const e=entries.find(x=>x.date===d);
+  if(e){diaryDraftText=e.text||'';diaryDraftMood=e.mood||'😊';diaryDraftImgs=[...(e.images||[])]}
+  else{diaryDraftText='';diaryDraftMood='😊';diaryDraftImgs=[]}
+  renderView();
+}
+function diarySetMood(m){diarySyncText();diaryDraftMood=m;renderView()}
+function diaryAddImg(input){
+  const files=input.files;if(!files||!files.length)return;
+  let pending=files.length;
+  for(const f of files){
+    const r=new FileReader();
+    r.onload=ev=>{
+      const img=new Image();
+      img.onload=()=>{
+        const max=900;let w=img.width,h=img.height;
+        if(w>max){h=Math.round(h*max/w);w=max}
+        const c=document.createElement('canvas');c.width=w;c.height=h;
+        const cx=c.getContext('2d');cx.drawImage(img,0,0,w,h);
+        const data=c.toDataURL('image/jpeg',0.7);
+        diaryDraftImgs.push(data);pending--;
+        if(pending===0){diarySyncText();renderView()}
+      };
+      img.src=ev.target.result;
+    };
+    r.readAsDataURL(f);
+  }
+  input.value='';
+}
+function diaryRmImg(i){diarySyncText();diaryDraftImgs.splice(i,1);renderView()}
+function saveDiary(){
+  diarySyncText();
+  const text=diaryDraftText.trim();
+  if(!text&&!diaryDraftImgs.length)return toast('写点什么或加张图吧 🌸','error');
+  const entries=DB.g('diary')||[];
+  const idx=entries.findIndex(x=>x.date===diarySelDate);
+  const entry={id:uid(),date:diarySelDate,mood:diaryDraftMood,text,images:[...diaryDraftImgs]};
+  if(idx>=0){entry.id=entries[idx].id;entries[idx]=entry}else entries.push(entry);
+  entries.sort((a,b)=>b.date.localeCompare(a.date));
+  try{DB.s('diary',entries)}catch(e){return toast('图片太多，存储空间不足，请减少些图片','error')}
+  diaryDraftText='';diaryDraftMood='😊';diaryDraftImgs=[];
+  renderView();toast('日记已保存 ✨','success');
+}
+function delDiary(id){
+  const entries=DB.g('diary')||[];
+  DB.s('diary',entries.filter(x=>x.id!==id));
+  renderView();toast('已删除','success');
+}
+function openDiaryImg(di,ii){
+  const entries=DB.g('diary')||[];const e=entries[di];if(!e||!e.images)return;
+  const src=e.images[ii];
+  openM(`<div style="text-align:center"><img src="${src}" style="max-width:100%;max-height:70vh;border-radius:16px;box-shadow:var(--s3)"></div><div class="md-f" style="justify-content:center;margin-top:12px"><button class="btn btn-p" onclick="closeM()">关闭</button></div>`);
+}
+V.diary=function(){
+  const entries=(DB.g('diary')||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
   return `
-    <div class="cd"><div class="ch"><div class="ct"><span class="ic2">📚</span> 书籍探讨</div>
-      <button class="btn btn-s btn-sm" onclick="refreshBook()">换一批</button></div>
-      <span class="cs">成长/文学/心理/认知 · 每日4本推荐+核心亮点</span>
+    <div class="diary-head">
+      <div class="dh-emoji">📔</div>
+      <div class="dh-t">我的小日记</div>
+      <div class="dh-s">今天也要开心呀 🐻 选个日期，写下心情和故事</div>
     </div>
-    <div class="wg">${curBook.map(b=>`<div class="wc">
-      <div class="ww">${esc(b.cat)} · ${esc(b.t)}</div>
-      <div class="wp">${esc(b.a)}</div>
-      <div class="wm">${esc(b.d)}</div>
-      <div class="we">${esc(b.k)}</div>
-    </div>`).join('')}</div>
-    <div class="cd"><div class="ch"><div class="ct"><span class="ic2">📖</span> 我的书单</div></div>
-      <div style="display:flex;gap:8px;margin-bottom:12px">
-        <input class="inp" id="bkName" placeholder="书名…" maxlength="40" style="flex:2">
-        <select class="sel" id="bkStatus" style="flex:1"><option>待读</option><option>在读</option><option>已读完</option></select>
-        <button class="btn btn-p btn-sm" onclick="addBook()">添加</button>
+    <div class="cd">
+      <div class="dh-row">
+        <label class="lbl" style="margin:0">📅 日期（可选）</label>
+        <input type="date" class="inp" id="diaryDate" value="${diarySelDate}" onchange="diaryOnDate(this.value)" style="max-width:170px">
       </div>
-      ${toRead.length?`<div style="margin-bottom:8px"><div style="font-size:12px;font-weight:500;color:var(--t3);margin-bottom:4px">📋 待读</div>${toRead.map(b=>`<div class="lc"><div class="lpf">📋</div><div class="lif"><div class="lt">${esc(b.name)}</div></div><div style="display:flex;gap:3px"><button class="btn btn-s btn-sm" onclick="moveBook('${b.id}','在读')">开始读</button><button class="btn btn-d btn-i btn-sm" onclick="rmBook('${b.id}')">✗</button></div></div>`).join('')}</div>`:''}
-      ${reading.length?`<div style="margin-bottom:8px"><div style="font-size:12px;font-weight:500;color:var(--p40);margin-bottom:4px">📖 在读</div>${reading.map(b=>`<div class="lc"><div class="lpf">📖</div><div class="lif"><div class="lt">${esc(b.name)}</div></div><div style="display:flex;gap:3px"><button class="btn btn-s btn-sm" onclick="moveBook('${b.id}','已读完')">读完</button><button class="btn btn-d btn-i btn-sm" onclick="rmBook('${b.id}')">✗</button></div></div>`).join('')}</div>`:''}
-      ${finished.length?`<div style="margin-bottom:8px"><div style="font-size:12px;font-weight:500;color:#4a7a50;margin-bottom:4px">✅ 已读完</div>${finished.map(b=>`<div class="lc"><div class="lpf">✅</div><div class="lif"><div class="lt">${esc(b.name)}</div></div><div style="display:flex;gap:3px"><button class="btn btn-d btn-i btn-sm" onclick="rmBook('${b.id}')">✗</button></div></div>`).join('')}</div>`:''}
-      ${!shelf.length?'<div class="empty"><div class="ei">📖</div><div class="et">书单还是空的，添加一本书开始吧</div></div>':''}
+      <div class="dh-moods">${DIARY_MOODS.map(m=>`<button class="mood-b${m===diaryDraftMood?' on':''}" onclick="diarySetMood('${m}')">${m}</button>`).join('')}</div>
+      <textarea class="txa" id="diaryText" placeholder="今天发生了什么呀？写下你的小心情～ 🌸" maxlength="2000">${esc(diaryDraftText)}</textarea>
+      <div class="dh-imgs">
+        ${diaryDraftImgs.map((s,i)=>`<div class="dh-img"><img src="${s}" alt=""><button class="dh-x" onclick="diaryRmImg(${i})">✗</button></div>`).join('')}
+        <label class="dh-add" title="添加图片">📷<input type="file" accept="image/*" multiple onchange="diaryAddImg(this)" hidden></label>
+      </div>
+      <button class="btn btn-p btn-sm" onclick="saveDiary()" style="width:100%;justify-content:center;margin-top:12px">💖 保存这篇日记</button>
     </div>
-    <div class="cd"><div class="ch"><div class="ct"><span class="ic2">✍️</span> 读书笔记&读后感</div></div>
-      <div class="fg"><label class="lbl">书名</label><input class="inp" id="bnBook" placeholder="哪本书的笔记…" maxlength="40"></div>
-      <div class="fg"><label class="lbl">摘抄</label><textarea class="txa" id="bnQuote" placeholder="书中打动你的段落…" maxlength="300"></textarea></div>
-      <div class="fg"><label class="lbl">读后感</label><textarea class="txa" id="bnThought" placeholder="你的感悟和思考…" maxlength="300"></textarea></div>
-      <button class="btn btn-p btn-sm" onclick="saveBookNote()">保存笔记</button>
-      ${notes.length?notes.slice().reverse().map(n=>`<div class="rc">
-        <div class="rc-t">📖 ${esc(n.book)}</div>
-        <div class="rc-body"><b>摘抄：</b>${esc(n.quote)}</div>
-        <div class="rc-tip"><b>感悟：</b>${esc(n.thought)}</div>
-        <div style="display:flex;justify-content:space-between;margin-top:6px"><span style="font-size:11px;color:var(--t3)">${esc(n.date)}</span><button class="btn btn-d btn-sm" onclick="delBookNote('${n.id}')">删除</button></div>
-      </div>`).join(''):'<div class="empty"><div class="ei">✍️</div><div class="et">暂无读书笔记</div></div>'}
-    </div>`;
+    ${entries.length?`<div class="cd"><div class="ch"><div class="ct"><span class="ic2">🌟</span> 往日日记</div><span class="cs">共 ${entries.length} 篇</span></div>
+      ${entries.map((e,ei)=>`<div class="dl">
+        <div class="dl-h"><span class="dl-d">${e.date}</span><span class="dl-m">${e.mood||'😊'}</span></div>
+        ${e.text?`<div class="dl-t">${esc(e.text).replace(/\n/g,'<br>')}</div>`:''}
+        ${e.images&&e.images.length?`<div class="dl-imgs">${e.images.map((s,ii)=>`<img src="${s}" class="dl-img" onclick="openDiaryImg(${ei},${ii})">`).join('')}</div>`:''}
+        <div class="dl-f"><button class="btn btn-d btn-sm" onclick="delDiary('${e.id}')">删除</button></div>
+      </div>`).join('')}
+    </div>`:'<div class="empty"><div class="ei">📔</div><div class="et">还没有日记，写下第一篇吧</div></div>'}
+  `;
 };
-function addBook(){
-  const name=document.getElementById('bkName').value.trim();
-  const status=document.getElementById('bkStatus').value;
-  if(!name)return toast('请输入书名','error');
-  const shelf=DB.g('bookShelf')||[];
-  shelf.push({id:uid(),name,status});
-  DB.s('bookShelf',shelf);renderView();toast('已添加到书单','success');
-}
-function moveBook(id,status){
-  const shelf=DB.g('bookShelf')||[];
-  const b=shelf.find(x=>x.id===id);if(b)b.status=status;
-  DB.s('bookShelf',shelf);renderView();toast('状态已更新','success');
-}
-function rmBook(id){const shelf=DB.g('bookShelf')||[];DB.s('bookShelf',shelf.filter(x=>x.id!==id));renderView();toast('已移除','success')}
-function saveBookNote(){
-  const book=document.getElementById('bnBook').value.trim();
-  const quote=document.getElementById('bnQuote').value.trim();
-  const thought=document.getElementById('bnThought').value.trim();
-  if(!book||!quote&&!thought)return toast('请填写书名和内容','error');
-  const notes=DB.g('bookNotes')||[];
-  notes.push({id:uid(),book,quote,thought,date:fmtD(Date.now())});
-  DB.s('bookNotes',notes);renderView();toast('笔记已保存','success');
-}
-function delBookNote(id){const notes=DB.g('bookNotes')||[];DB.s('bookNotes',notes.filter(x=>x.id!==id));renderView();toast('已删除','success')}
 
 // ─── 绑定视图事件 ─────────────────────────────────────
 function bindView(v){
@@ -1208,7 +1236,7 @@ function openRefreshSetting(){
     <div class="fg"><label class="lbl">每天几点自动刷新推荐内容？</label>
       <select class="sel" id="refreshHour">${Array.from({length:24},(_,i)=>`<option value="${i}" ${i===h?'selected':''}>${i.toString().padStart(2,'0')}:00</option>`).join('')}</select>
     </div>
-    <div style="font-size:12px;color:var(--t3);line-height:1.6">设置后，每天到点会自动更换：今日单词、穿搭灵感、摄影技巧、理财小贴士、书籍推荐、语言表达课题。刷新前一天的记录会被保留在每日历史里。</div>
+    <div style="font-size:12px;color:var(--t3);line-height:1.6">设置后，每天到点会自动更换：今日单词、穿搭灵感、摄影技巧、理财小贴士、语言表达课题。刷新前一天的记录会被保留在每日历史里。</div>
     <div class="md-f"><button class="btn btn-s" onclick="closeM()">取消</button><button class="btn btn-p" onclick="saveRefreshHour()">保存</button></div>`);
 }
 function saveRefreshHour(){
@@ -1229,9 +1257,9 @@ function checkDailyRefresh(){
   const now=new Date();
   if(now.getHours()>=hour){
     DB.s('lastRefreshDate',today);
-    refreshWords();refreshOutfit();refreshPhoto();refreshPhotoInsp();refreshFin();refreshBook();refreshVideo();nextExpr();articleOffset=0;curArticle=articleByDate(0);
+    refreshWords();refreshOutfit();refreshPhoto();refreshPhotoInsp();refreshFin();refreshVideo();nextExpr();articleOffset=0;curArticle=articleByDate(0);
     DB.s('dailyWords',curWords);DB.s('dailyOutfit',curOutfit);DB.s('dailyPhoto',curPhoto);DB.s('dailyPhotoInsp',curPhotoInsp);
-    DB.s('dailyFin',curFin);DB.s('dailyBook',curBook);DB.s('dailyVideo',curVideo);DB.s('dailyExpr',curExpr);DB.s('dailyListen',curListen);DB.s('dailyLogic',curLogic);DB.s('articleOffset',articleOffset);DB.s('dailyArticle',curArticle);
+    DB.s('dailyFin',curFin);DB.s('dailyVideo',curVideo);DB.s('dailyExpr',curExpr);DB.s('dailyListen',curListen);DB.s('dailyLogic',curLogic);DB.s('articleOffset',articleOffset);DB.s('dailyArticle',curArticle);
     toast('每日内容已刷新','success');
   }
 }
