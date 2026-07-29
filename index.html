@@ -55,7 +55,16 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:l
 .btn-d{background:transparent;color:#d99a8a}.btn-d:hover{background:#fceee8;color:#c9786a}
 .btn-sm{padding:8px 12px;font-size:12px}.btn-i{width:30px;height:30px;padding:0;justify-content:center;border-radius:8px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.ti-row{display:flex;gap:8px;margin-bottom:14px}.ti-row .inp{flex:1}
+.ti-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}.ti-row .inp{flex:1;min-width:120px}.ti-row .inp[type=date]{max-width:130px;padding:8px 10px}
+.td-date{display:flex;gap:8px;align-items:center;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.td-nav{width:30px;height:34px;border-radius:var(--r1);border:1px solid var(--bd);background:var(--warm);color:var(--t2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.td-d{flex-shrink:0;min-width:52px;padding:8px 10px;border-radius:var(--r1);border:1px solid var(--bd);background:var(--warm);text-align:center;cursor:pointer;transition:var(--t)}
+.td-d .td-dw{font-size:10px;color:var(--t3);margin-bottom:2px}
+.td-d .td-dd{font-size:14px;font-weight:600;color:var(--t1)}
+.td-d.on{background:var(--gac);border-color:transparent}.td-d.on .td-dw,.td-d.on .td-dd{color:#fff}
+.td-d.hasDone .td-dd{position:relative}.td-d.hasDone .td-dd::after{content:'';position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:#5a9a30;border-radius:50%}
+.td-toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 0;font-size:12px;color:var(--t3);cursor:pointer;border-bottom:1px dashed var(--bd);margin-bottom:8px}
+.td-toggle span{color:var(--p40);font-weight:500}
 .tl{list-style:none}
 .ti-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--cream);border-radius:var(--r1);margin-bottom:6px;transition:var(--t);border:1px solid transparent}.ti-item:hover{border-color:var(--bd)}
 .tcb{width:20px;height:20px;border:2px solid var(--p30);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--warm)}.tcb.chk{background:var(--gac);border-color:transparent}.tcb.chk::after{content:'✓';color:#fff;font-size:12px;font-weight:bold}
@@ -549,13 +558,41 @@ function openM(html){document.getElementById('moD').innerHTML=html;document.getE
 function closeM(){document.getElementById('moO').classList.remove('show')}
 
 // ─── 待办事项 ────────────────────────────────────────
+let todoSelDate=fmtD(Date.now());
+let todoShowDone=false;
+function todoWeekDay(d){const dt=new Date(d+'T00:00:00');return ['日','一','二','三','四','五','六'][dt.getDay()]}
+function todoIsToday(d){return d===fmtD(Date.now())}
+function todoAddDays(d,n){const dt=new Date(d+'T00:00:00');dt.setDate(dt.getDate()+n);return fmtD(dt)}
+function todoStripHTML(){
+  const days=[];for(let i=-3;i<=3;i++){days.push(todoAddDays(todoSelDate,i))}
+  const meta={};
+  (DB.g('todos')||[]).forEach(x=>{if(!meta[x.date])meta[x.date]={done:0,total:0};meta[x.date].total++;if(x.done)meta[x.date].done++});
+  return `<div class="td-date">
+    <button class="td-nav" onclick="todoNavDate(-1)">‹</button>
+    ${days.map(d=>{
+      const on=d===todoSelDate;
+      const hasDone=(meta[d]&&meta[d].done>0);
+      const label=todoIsToday(d)?'今天':todoWeekDay(d);
+      return `<div class="td-d${on?' on':''}${hasDone?' hasDone':''}" onclick="todoSetDate('${d}')">
+        <div class="td-dw">${esc(label)}</div>
+        <div class="td-dd">${d.slice(5).replace('-','/')}</div>
+      </div>`;
+    }).join('')}
+    <button class="td-nav" onclick="todoNavDate(1)">›</button>
+  </div>`;
+}
+function todoSetDate(d){todoSelDate=d;todoShowDone=false;renderView()}
+function todoNavDate(n){todoSelDate=todoAddDays(todoSelDate,n);todoShowDone=false;renderView()}
 V.todo=function(){
-  const items=DB.g('todos')||[];
+  const items=(DB.g('todos')||[]).filter(i=>i.date===todoSelDate);
   const done=items.filter(i=>i.done).length;
   const total=items.length;
   const pend=total-done;
   const rate=total?Math.round(done/total*100):0;
   const checked=todayChecked();
+  const pendingItems=items.filter(i=>!i.done);
+  const doneItems=items.filter(i=>i.done);
+  const dateLabel=todoIsToday(todoSelDate)?'今天':todoSelDate;
   return `
     <div class="cd" style="background:var(--gac);border:none;color:#fff;box-shadow:0 6px 18px rgba(217,122,150,.25)">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
@@ -574,18 +611,27 @@ V.todo=function(){
       <div style="font-size:13px;color:var(--t2);line-height:1.6">“${dailyQuote()}”</div>
     </div>
     <div class="cd">
-      <div class="ch"><div class="ct"><span class="ic2">✓</span> 待办事项</div><span class="cs">今日事今日毕，每天都是新的开始</span></div>
+      <div class="ch"><div class="ct"><span class="ic2">✓</span> 待办事项</div><span class="cs">${dateLabel} · 共 ${total} 项</span></div>
       <div class="wg">
-        <div class="wc"><div class="ww">${total}</div><div class="wp">今日任务</div></div>
+        <div class="wc"><div class="ww">${total}</div><div class="wp">任务</div></div>
         <div class="wc"><div class="ww" style="color:#5a9a30">${done}</div><div class="wp">已完成</div></div>
         <div class="wc"><div class="ww" style="color:#c98a2e">${pend}</div><div class="wp">待完成</div></div>
         <div class="wc"><div class="ww" style="color:var(--p40)">${rate}%</div><div class="wp">完成率</div></div>
       </div>
-      <div class="ti-row"><input class="inp" id="todoIn" placeholder="添加新任务…" maxlength="100"><button class="btn btn-p btn-sm" onclick="addTodo()">添加</button></div>
-      <ul class="tl" id="todoList">${items.map(i=>todoItemHTML(i)).join('')}</ul>
-      ${items.length===0?'<div class="empty"><div class="ei">📝</div><div class="et">还没有任务，添加一个开始吧</div></div>':''}
+      ${todoStripHTML()}
+      <div class="ti-row">
+        <input type="date" class="inp" id="todoDate" value="${todoSelDate}" onchange="todoDateInput(this.value)">
+        <input class="inp" id="todoIn" placeholder="添加新任务…" maxlength="100">
+        <button class="btn btn-p btn-sm" onclick="addTodo()">添加</button>
+      </div>
+      <ul class="tl" id="todoList">${pendingItems.map(i=>todoItemHTML(i)).join('')}</ul>
+      ${pendingItems.length===0?'<div class="empty"><div class="ei">📝</div><div class="et">今天还没有待办任务，添加一个开始吧</div></div>':''}
+      ${doneItems.length?`<div class="td-toggle" onclick="todoToggleDone()">${todoShowDone?'▾ 隐藏已完成':'▸ 显示已完成 ('+doneItems.length+')'} <span>点击切换</span></div>
+      ${todoShowDone?'<ul class="tl">'+doneItems.map(i=>todoItemHTML(i)).join('')+'</ul>':''}`:''}
     </div>`;
 };
+function todoDateInput(d){if(d)todoSelDate=d;renderView()}
+function todoToggleDone(){todoShowDone=!todoShowDone;renderView()}
 function todoItemHTML(i){
   return `<li class="ti-item${i.done?' done':''}" data-id="${i.id}">
     <div class="tcb${i.done?' chk':''}" onclick="togTodo('${i.id}')"></div>
@@ -595,10 +641,12 @@ function todoItemHTML(i){
 }
 function addTodo(){
   const inp=document.getElementById('todoIn');
+  const dateInp=document.getElementById('todoDate');
   const t=inp.value.trim();if(!t)return toast('请输入任务内容','error');
+  const d=(dateInp&&dateInp.value)?dateInp.value:todoSelDate;
   const items=DB.g('todos')||[];
-  items.push({id:uid(),text:t,done:false,date:fmtD(Date.now())});
-  DB.s('todos',items);inp.value='';renderView();toast('任务已添加','success');
+  items.push({id:uid(),text:t,done:false,date:d});
+  DB.s('todos',items);inp.value='';todoSelDate=d;todoShowDone=false;renderView();toast('任务已添加','success');
 }
 function togTodo(id){
   const items=DB.g('todos')||[];
