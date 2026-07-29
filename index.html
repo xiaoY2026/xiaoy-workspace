@@ -529,7 +529,10 @@ function renderView(){
   const c=document.getElementById('ctn');
   c.innerHTML='';
   const fn=V[S.view];
-  if(fn){c.innerHTML=fn();bindView(S.view)}
+  if(fn){
+    try{c.innerHTML=fn();bindView(S.view)}
+    catch(e){c.innerHTML=`<div class="cd" style="color:#b06a80"><div class="ch"><div class="ct">⚠️ 页面渲染出错</div></div><pre style="white-space:pre-wrap;font-size:12px;background:#fff5f7;padding:12px;border-radius:8px">${esc(e.message)}\n${esc(e.stack||'')}</pre></div>`}
+  }
 }
 const V={};
 
@@ -859,6 +862,7 @@ function renderWeightChart(data){
 }
 
 // ─── 记账 ────────────────────────────────────────────
+const EXP_CATS=["餐饮","交通","购物","房租","娱乐","其他"];
 V.accounting=function(){
   const records=DB.g('acct')||[];
   const budget=DB.g('budget')||0;
