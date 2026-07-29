@@ -65,6 +65,10 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:l
 .td-d.hasDone .td-dd{position:relative}.td-d.hasDone .td-dd::after{content:'';position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:#5a9a30;border-radius:50%}
 .td-toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 0;font-size:12px;color:var(--t3);cursor:pointer;border-bottom:1px dashed var(--bd);margin-bottom:8px}
 .td-toggle span{color:var(--p40);font-weight:500}
+.td-wg{grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.td-wg .wc{padding:10px 6px;text-align:center}
+.td-wg .ww{font-size:15px}
+.td-wg .wp{font-size:10px}
 .tl{list-style:none}
 .ti-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--cream);border-radius:var(--r1);margin-bottom:6px;transition:var(--t);border:1px solid transparent}.ti-item:hover{border-color:var(--bd)}
 .tcb{width:20px;height:20px;border:2px solid var(--p30);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--warm)}.tcb.chk{background:var(--gac);border-color:transparent}.tcb.chk::after{content:'✓';color:#fff;font-size:12px;font-weight:bold}
@@ -612,7 +616,7 @@ V.todo=function(){
     </div>
     <div class="cd">
       <div class="ch"><div class="ct"><span class="ic2">✓</span> 待办事项</div><span class="cs">${dateLabel} · 共 ${total} 项</span></div>
-      <div class="wg">
+      <div class="wg td-wg">
         <div class="wc"><div class="ww">${total}</div><div class="wp">任务</div></div>
         <div class="wc"><div class="ww" style="color:#5a9a30">${done}</div><div class="wp">已完成</div></div>
         <div class="wc"><div class="ww" style="color:#c98a2e">${pend}</div><div class="wp">待完成</div></div>
