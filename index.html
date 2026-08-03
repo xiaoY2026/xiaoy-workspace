@@ -933,7 +933,8 @@ let acSelMonth=fmtD(Date.now()).slice(0,7);
 function acMonthOptions(){
   const records=DB.g('acct')||[];
   const cur=fmtD(Date.now()).slice(0,7);
-  let min=cur;
+  const jan=cur.slice(0,4)+'-01';
+  let min=jan;
   records.forEach(r=>{const m=r.date.slice(0,7);if(m<min)min=m});
   const opts=[];let [y,m]=min.split('-').map(Number);const [cy,cm]=cur.split('-').map(Number);
   while(y<cy||(y===cy&&m<=cm)){opts.push(y+'-'+String(m).padStart(2,'0'));m++;if(m>12){m=1;y++}}
